@@ -1,0 +1,1 @@
+pyuic .\menaceDesign.ui -o .\menaceDesign.py
