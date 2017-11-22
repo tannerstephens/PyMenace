@@ -40,7 +40,7 @@ class Menace:
 
         winner = self.detect_win(board)
 
-        if not ((xs == os) or (xs == (os+1))):
+        if not (xs == os):
             return False
         elif winner == False:
             return False
@@ -83,16 +83,13 @@ class Menace:
             return False
 
     def learn(self):
-        if sum(self.map[str(self.board)]) == 0 and " " in self.board:
-            off = -1
+        winner = self.detect_win(self.board)
+        if winner == "X":
+            off = 4
+        elif winner == "C":
+            off = 3
         else:
-            winner = self.detect_win(self.board)
-            if winner == "X":
-                off = 4
-            elif winner == "C":
-                off = 3
-            else:
-                off = -1
+            off = -1
 
         for move in self.plays:
             self.map[str(move[0])][move[1]] += off
