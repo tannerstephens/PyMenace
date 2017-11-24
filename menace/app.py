@@ -11,13 +11,13 @@ class Menace(QtGui.QMainWindow, menaceDesign.Ui_MainWindow):
         self.connectFunctions()
         win = self.menace.play()
         self.update()
-
         self.setWindowIcon(QtGui.QIcon("./menace/ui/corner.png"))
-
         if os.path.isfile("./menace/learning.dat"):
             self.menace.load("./menace/learning.dat")
 
     def update(self):
+        # Update buttons with current board state
+        # Disable already used buttons
         self.UL.setText(self.menace.board[0])
         self.ML.setText(self.menace.board[3])
         self.LL.setText(self.menace.board[6])
@@ -38,10 +38,12 @@ class Menace(QtGui.QMainWindow, menaceDesign.Ui_MainWindow):
         self.LR.setEnabled(self.menace.board[8]==" ")
 
     def closeEvent(self, event):
+        # Save the learned data on close
         self.menace.save("./menace/learning.dat")
         event.accept()
 
     def connectFunctions(self):
+        # Connect the button events to the correct functions
         self.UL.clicked.connect(self.ul_button)
         self.ML.clicked.connect(self.ml_button)
         self.LL.clicked.connect(self.ll_button)
@@ -52,19 +54,30 @@ class Menace(QtGui.QMainWindow, menaceDesign.Ui_MainWindow):
         self.MR.clicked.connect(self.mr_button)
         self.LR.clicked.connect(self.lr_button)
 
+
+    # xx_button all are functionally the same, just corresponding to different
+    # board positions.
     def ul_button(self):
+        # Play in position
+        # 012
+        # 345
+        # 678
         win = self.menace.play(0)
         self.update()
-        if win:
 
+        if win:
+            # If win detected, learn from moves
             self.menace.learn()
+            # Menace takes next turn outside of if
             self.update()
 
+        # Take computer turn
         win = self.menace.play()
         self.update()
         if win:
-
+            # If win detected, learn from moves
             self.menace.learn()
+            # Menace won, needs another turn
             self.menace.play()
             self.update()
 
